@@ -4,8 +4,8 @@ import {after, before, test} from "node:test"
 
 const {prisma} = await import("../prisma.ts")
 
-const userName = `borrow-user-${randomUUID()}`
-const bookName = `borrow-book-${randomUUID()}`
+const userName = `borrow-test-user-${randomUUID()}`
+const bookName = `borrow-test-book-${randomUUID()}`
 
 before(async () => {
     await prisma.borrow.deleteMany({
