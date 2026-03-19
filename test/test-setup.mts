@@ -1,20 +1,16 @@
-import type {Server} from "node:http"
-import "dotenv/config"
+import {app} from "../app.ts";
+import {prisma} from "../prisma.ts";
+import {Server} from "node:http";
 
-const {app} = await import("../app.ts")
-const {prisma} = await import("../prisma.ts")
-
-let server: Server | undefined
+let server: Server
 
 export async function globalSetup() {
     server = app.listen(process.env.TEST_PORT)
+    server.on("close", () => {
+        prisma.$disconnect()
+    })
 }
 
 export async function globalTeardown() {
-    if (server) {
-        server.on("close", async () => {
-            await prisma.$disconnect()
-        })
-    }
-
+    server.close()
 }
